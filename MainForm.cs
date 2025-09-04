@@ -146,6 +146,19 @@ namespace BuyiFFmpegUI
             }
         }
 
+        private string lastOutputDir = "";
+
+        private void BtnOpenLastDest_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(lastOutputDir)) { return; }
+            if (!Directory.Exists(lastOutputDir))
+            {
+                Utils.ShowErrorMessageBox($"文件夹已经不存在了\n{lastOutputDir}");
+                return;
+            }
+            Utils.OpenExplorer(lastOutputDir);
+        }
+
         private void BtnStart_Click(object sender, EventArgs e)
         {
             try
@@ -231,6 +244,8 @@ namespace BuyiFFmpegUI
                     info.ArgumentList.Add(path);
                     using var v = Process.Start(info);
                 }
+                lastOutputDir = outputDirPath;
+                BtnOpenLastDest.Enabled = true;
             }
             catch (Exception ex)
             {

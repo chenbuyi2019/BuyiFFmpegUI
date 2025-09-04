@@ -39,6 +39,7 @@
             pnTemplate = new Panel();
             txtParams = new TextBox();
             pnTemplateUp = new Panel();
+            BtnDownloadFFmpeg = new Button();
             ListTemplates = new ComboBox();
             BtnOpenDir = new Button();
             BtnSaveTemplate = new Button();
@@ -50,7 +51,7 @@
             txtTaskNum = new NumericUpDown();
             BtnStart = new Button();
             checkEndPause = new CheckBox();
-            BtnDownloadFFmpeg = new Button();
+            BtnOpenLastDest = new Button();
             pnInput.SuspendLayout();
             pnTemplate.SuspendLayout();
             pnTemplateUp.SuspendLayout();
@@ -171,6 +172,16 @@
             pnTemplateUp.Size = new Size(977, 114);
             pnTemplateUp.TabIndex = 11;
             // 
+            // BtnDownloadFFmpeg
+            // 
+            BtnDownloadFFmpeg.Location = new Point(546, 50);
+            BtnDownloadFFmpeg.Name = "BtnDownloadFFmpeg";
+            BtnDownloadFFmpeg.Size = new Size(139, 34);
+            BtnDownloadFFmpeg.TabIndex = 11;
+            BtnDownloadFFmpeg.Text = "FFmpeg官网";
+            BtnDownloadFFmpeg.UseVisualStyleBackColor = true;
+            BtnDownloadFFmpeg.Click += BtnDownloadFFmpeg_Click;
+            // 
             // ListTemplates
             // 
             ListTemplates.DropDownStyle = ComboBoxStyle.DropDownList;
@@ -274,20 +285,22 @@
             checkEndPause.Text = "执行完成后保留cmd窗口";
             checkEndPause.UseVisualStyleBackColor = true;
             // 
-            // BtnDownloadFFmpeg
+            // BtnOpenLastDest
             // 
-            BtnDownloadFFmpeg.Location = new Point(546, 50);
-            BtnDownloadFFmpeg.Name = "BtnDownloadFFmpeg";
-            BtnDownloadFFmpeg.Size = new Size(139, 34);
-            BtnDownloadFFmpeg.TabIndex = 11;
-            BtnDownloadFFmpeg.Text = "FFmpeg官网";
-            BtnDownloadFFmpeg.UseVisualStyleBackColor = true;
-            BtnDownloadFFmpeg.Click += BtnDownloadFFmpeg_Click;
+            BtnOpenLastDest.Enabled = false;
+            BtnOpenLastDest.Location = new Point(446, 655);
+            BtnOpenLastDest.Name = "BtnOpenLastDest";
+            BtnOpenLastDest.Size = new Size(207, 34);
+            BtnOpenLastDest.TabIndex = 12;
+            BtnOpenLastDest.Text = "打开上一次输出文件夹";
+            BtnOpenLastDest.UseVisualStyleBackColor = true;
+            BtnOpenLastDest.Click += BtnOpenLastDest_Click;
             // 
             // MainForm
             // 
             AutoScaleMode = AutoScaleMode.None;
             ClientSize = new Size(979, 767);
+            Controls.Add(BtnOpenLastDest);
             Controls.Add(checkEndPause);
             Controls.Add(BtnStart);
             Controls.Add(txtTaskNum);
@@ -338,5 +351,6 @@
         private Panel pnTemplateUp;
         private CheckBox checkEndPause;
         private Button BtnDownloadFFmpeg;
+        private Button BtnOpenLastDest;
     }
 }
