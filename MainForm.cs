@@ -33,7 +33,12 @@ namespace BuyiFFmpegUI
 
         private void BtnOpenDir_Click(object sender, EventArgs e)
         {
-            Utils.OpenExplorerDirectory(AppContext.BaseDirectory);
+            Utils.OpenExplorer(AppContext.BaseDirectory);
+        }
+
+        private void BtnDownloadFFmpeg_Click(object sender, EventArgs e)
+        {
+            Utils.OpenExplorer("https://ffmpeg.org/");
         }
 
         private void LoadTemplates()

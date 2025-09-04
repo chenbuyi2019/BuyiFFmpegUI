@@ -64,7 +64,7 @@ namespace BuyiFFmpegUI
         /// <summary>
         /// 打开文件浏览器
         /// </summary>
-        public static void OpenExplorerDirectory(string path)
+        public static void OpenExplorer(string path)
         {
             var info = new ProcessStartInfo()
             {

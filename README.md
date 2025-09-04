@@ -1,1 +1,7 @@
-# BuyiFFmpegUI
+﻿# BuyiFFmpegUI
+
+我发现我找到的 ffmpeg gui 都不支持文件夹嵌套执行工作，   
+我干脆自己写了个软件。   
+
+什么文件结构进去，什么文件结构出来。    
+

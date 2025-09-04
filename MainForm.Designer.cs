@@ -50,6 +50,7 @@
             txtTaskNum = new NumericUpDown();
             BtnStart = new Button();
             checkEndPause = new CheckBox();
+            BtnDownloadFFmpeg = new Button();
             pnInput.SuspendLayout();
             pnTemplate.SuspendLayout();
             pnTemplateUp.SuspendLayout();
@@ -156,6 +157,7 @@
             // 
             // pnTemplateUp
             // 
+            pnTemplateUp.Controls.Add(BtnDownloadFFmpeg);
             pnTemplateUp.Controls.Add(ListTemplates);
             pnTemplateUp.Controls.Add(BtnOpenDir);
             pnTemplateUp.Controls.Add(BtnSaveTemplate);
@@ -272,6 +274,16 @@
             checkEndPause.Text = "执行完成后保留cmd窗口";
             checkEndPause.UseVisualStyleBackColor = true;
             // 
+            // BtnDownloadFFmpeg
+            // 
+            BtnDownloadFFmpeg.Location = new Point(546, 50);
+            BtnDownloadFFmpeg.Name = "BtnDownloadFFmpeg";
+            BtnDownloadFFmpeg.Size = new Size(139, 34);
+            BtnDownloadFFmpeg.TabIndex = 11;
+            BtnDownloadFFmpeg.Text = "FFmpeg官网";
+            BtnDownloadFFmpeg.UseVisualStyleBackColor = true;
+            BtnDownloadFFmpeg.Click += BtnDownloadFFmpeg_Click;
+            // 
             // MainForm
             // 
             AutoScaleMode = AutoScaleMode.None;
@@ -325,5 +337,6 @@
         private Button BtnStart;
         private Panel pnTemplateUp;
         private CheckBox checkEndPause;
+        private Button BtnDownloadFFmpeg;
     }
 }
