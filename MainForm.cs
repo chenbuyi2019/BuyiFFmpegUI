@@ -191,7 +191,8 @@ namespace BuyiFFmpegUI
                 }
                 var outputFormat = txtFormat.Text.Trim().Trim('.');
                 if (string.IsNullOrEmpty(outputFormat)) { throw new Exception($"没有要输出的格式"); }
-                var listTargets = new List<string>();
+                var listTargets = new HashSet<string>();
+                var dictSameNames = new Dictionary<string, List<FileInfo>>();
                 var sourceFormats = new HashSet<string>();
                 var searchs = searchRaw.Split('|').ToHashSet();
                 foreach (var search in searchs)
@@ -200,14 +201,53 @@ namespace BuyiFFmpegUI
                     if (string.IsNullOrEmpty(s1)) { continue; }
                     foreach (var item in sourceDir.EnumerateFiles(s1, SearchOption.AllDirectories))
                     {
-                        listTargets.Add(Utils.CleanPath(item.FullName));
+                        var p = Utils.CleanPath(item.FullName);
+                        listTargets.Add(p);
                         sourceFormats.Add(item.Extension.ToLower());
+                        var p2 = Path.ChangeExtension(p, null);
+                        if (!dictSameNames.TryGetValue(p2, out var list))
+                        {
+                            list = new List<FileInfo>();
+                            dictSameNames.Add(p2, list);
+                        }
+                        list.Add(item);
                         CheckDoEvents();
                     }
                 }
                 if (listTargets.Count < 1) { throw new Exception($"找不到任何要转码的文件\n{sourceDir.FullName}\n{searchRaw}"); }
+                var sameNameKeys = dictSameNames.Keys.ToArray();
+                var newAddFiles = new HashSet<string>();
+                foreach (var key in sameNameKeys)
+                {
+                    if (dictSameNames.TryGetValue(key, out var list))
+                    {
+                        if (list.Count < 2)
+                        {
+                            dictSameNames.Remove(key);
+                        }
+                        else
+                        {
+                            foreach (var item in list)
+                            {
+                                var p = Utils.CleanPath(item.FullName);
+                                listTargets.Remove(p);
+                            }
+                            var theFile = list.MaxBy(x => x.LastWriteTime);
+                            if (theFile != null)
+                            {
+                                var p = Utils.CleanPath(theFile.FullName);
+                                newAddFiles.Add(p);
+                                listTargets.Add(p);
+                            }
+                        }
+                    }
+                }
 
                 var msg = $"你确定要开始转码吗？\n同时运行 {taskNum} 个任务\n源： {sourceDir.FullName}\n输出： {outputDirPath}\n输出格式： {outputFormat}\n源文件个数： {listTargets.Count}\n源文件格式： {string.Join("  ", sourceFormats)}";
+                if (newAddFiles.Count > 0)
+                {
+                    msg += $"\n警告： 有 {newAddFiles.Count} 个 名字一样，但源文件格式不一样 的文件，只会转换文件时间最新的那个\n比如 {string.Join('\n', newAddFiles.Take(2))}";
+                }
                 var ask = MessageBox.Show(msg, this.Text, MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
                 if (ask != DialogResult.OK) { return; }
 
@@ -239,7 +279,7 @@ namespace BuyiFFmpegUI
                         }
                         var progress = targetIndex / (float)targetGroup.Length;
                         writer.WriteLine($"title 进度 {targetIndex} / {targetGroup.Length} ");
-                        writer.WriteLine($"ffmpeg.exe -i \"{target}\" {outputParamsRaw} \"{outputPath}\"");
+                        writer.WriteLine($"ffmpeg.exe -y -i \"{target}\" {outputParamsRaw} \"{outputPath}\"");
                     }
                     writer.Dispose();
                     stream.Dispose();
@@ -250,7 +290,7 @@ namespace BuyiFFmpegUI
                     {
                         UseShellExecute = true,
                         FileName = "cmd.exe",
-                        WorkingDirectory = sourceDir.FullName,
+                        WorkingDirectory = AppContext.BaseDirectory,
                         WindowStyle = ProcessWindowStyle.Normal
                     };
                     info.ArgumentList.Add(pauseOnEnd ? "/k" : "/c");
