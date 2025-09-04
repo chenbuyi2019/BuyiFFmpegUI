@@ -155,6 +155,8 @@ namespace BuyiFFmpegUI
 
         private string lastOutputDir = "";
 
+        private readonly List<Process> createdProcess = new();
+
         private void BtnOpenLastDest_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(lastOutputDir)) { return; }
@@ -284,6 +286,8 @@ namespace BuyiFFmpegUI
                     writer.Dispose();
                     stream.Dispose();
                 }
+                BtnOpenLastDest.Enabled = true;
+                BtnKillCmd.Enabled = true;
                 foreach (var path in scriptFiles)
                 {
                     var info = new ProcessStartInfo()
@@ -295,10 +299,11 @@ namespace BuyiFFmpegUI
                     };
                     info.ArgumentList.Add(pauseOnEnd ? "/k" : "/c");
                     info.ArgumentList.Add(path);
-                    using var v = Process.Start(info);
+                    var v = Process.Start(info);
+                    if (v == null) { throw new Exception("创建cmd进程失败"); }
+                    createdProcess.Add(v);
                 }
                 lastOutputDir = outputDirPath;
-                BtnOpenLastDest.Enabled = true;
             }
             catch (Exception ex)
             {
@@ -306,5 +311,35 @@ namespace BuyiFFmpegUI
             }
         }
 
+        private void BtnKillCmd_Click(object sender, EventArgs e)
+        {
+            if (createdProcess.Count < 1)
+            {
+                Utils.ShowInfoMessageBox($"没有进行中的 ffmpeg cmd 进程");
+                return;
+            }
+            var ask = MessageBox.Show($"你确定要提前结束工作，杀死还没退出的 ffmpeg cmd 进程吗？  ", this.Text, MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+            if (ask != DialogResult.OK) { return; }
+
+            try
+            {
+                createdProcess.RemoveAll(x => x.HasExited);
+                int killed = 0;
+                foreach (var p in createdProcess)
+                {
+                    if (!p.HasExited)
+                    {
+                        p.Kill();
+                        killed += 1;
+                    }
+                }
+                createdProcess.RemoveAll(x => x.HasExited);
+                Utils.ShowInfoMessageBox($"一共杀死了 {killed} 个进程");
+            }
+            catch (Exception ex)
+            {
+                Utils.ShowErrorMessageBox($"杀死进程出错： \n{ex.Message}");
+            }
+        }
     }
 }

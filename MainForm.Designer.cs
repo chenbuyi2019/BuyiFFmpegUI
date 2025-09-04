@@ -53,6 +53,7 @@
             BtnStart = new Button();
             checkEndPause = new CheckBox();
             BtnOpenLastDest = new Button();
+            BtnKillCmd = new Button();
             pnInput.SuspendLayout();
             pnTemplate.SuspendLayout();
             pnTemplateUp.SuspendLayout();
@@ -309,10 +310,22 @@
             BtnOpenLastDest.UseVisualStyleBackColor = true;
             BtnOpenLastDest.Click += BtnOpenLastDest_Click;
             // 
+            // BtnKillCmd
+            // 
+            BtnKillCmd.Enabled = false;
+            BtnKillCmd.Location = new Point(286, 698);
+            BtnKillCmd.Name = "BtnKillCmd";
+            BtnKillCmd.Size = new Size(169, 34);
+            BtnKillCmd.TabIndex = 13;
+            BtnKillCmd.Text = "杀死进行中的cmd";
+            BtnKillCmd.UseVisualStyleBackColor = true;
+            BtnKillCmd.Click += BtnKillCmd_Click;
+            // 
             // MainForm
             // 
             AutoScaleMode = AutoScaleMode.None;
             ClientSize = new Size(979, 767);
+            Controls.Add(BtnKillCmd);
             Controls.Add(BtnOpenLastDest);
             Controls.Add(checkEndPause);
             Controls.Add(BtnStart);
@@ -366,5 +379,6 @@
         private Button BtnDownloadFFmpeg;
         private Button BtnOpenLastDest;
         private ComboBox ListSearchs;
+        private Button BtnKillCmd;
     }
 }
