@@ -1,0 +1,4 @@
+mp3
+-y -c:a libmp3lame 
+-ar 44100 
+-b:a 96k
