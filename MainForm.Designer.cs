@@ -33,6 +33,7 @@
             label2 = new Label();
             txtSearch = new TextBox();
             pnInput = new Panel();
+            ListSearchs = new ComboBox();
             label4 = new Label();
             txtOutputDir = new TextBox();
             label3 = new Label();
@@ -94,6 +95,7 @@
             // pnInput
             // 
             pnInput.BorderStyle = BorderStyle.FixedSingle;
+            pnInput.Controls.Add(ListSearchs);
             pnInput.Controls.Add(label4);
             pnInput.Controls.Add(txtOutputDir);
             pnInput.Controls.Add(label3);
@@ -104,18 +106,29 @@
             pnInput.Dock = DockStyle.Top;
             pnInput.Location = new Point(0, 0);
             pnInput.Name = "pnInput";
-            pnInput.Size = new Size(979, 196);
+            pnInput.Size = new Size(979, 204);
             pnInput.TabIndex = 4;
+            // 
+            // ListSearchs
+            // 
+            ListSearchs.DropDownStyle = ComboBoxStyle.DropDownList;
+            ListSearchs.FormattingEnabled = true;
+            ListSearchs.Items.AddRange(new object[] { "*", "*.jpg|*.png|*.bmp|*.jpeg|*.gif|*.webp|*.tif|*.raw|*.heif", "*.mp4|*.avi|*.mkv|*.mov|*.webm|*.wmv|*.m4v", "*.mp3|*.ogg|*.wav|*.m4a|*.flac|*.aac|*.aiff|*.opus" });
+            ListSearchs.Location = new Point(639, 52);
+            ListSearchs.Name = "ListSearchs";
+            ListSearchs.Size = new Size(191, 29);
+            ListSearchs.TabIndex = 9;
+            ListSearchs.SelectedIndexChanged += ListSearchs_SelectedIndexChanged;
             // 
             // label4
             // 
             label4.AutoSize = true;
             label4.Font = new Font("Microsoft YaHei UI", 10F);
-            label4.Location = new Point(12, 140);
+            label4.Location = new Point(12, 129);
             label4.Name = "label4";
-            label4.Size = new Size(695, 40);
+            label4.Size = new Size(539, 60);
             label4.TabIndex = 6;
-            label4.Text = "从源文件夹里搜索匹配名字的文件（包括子文件夹里的那些），然后按源文件夹的结构进行输出到新文件夹里。\r\n输出文件夹如果是 * 则会自动生成文件夹 ffmpeg_xxx 在源文件夹旁边。";
+            label4.Text = "从源文件夹里搜索匹配名字的文件（包括子文件夹里的那些），搜索多种匹配用 | 分隔\r\n然后按源文件夹的结构进行输出到新文件夹里。\r\n输出文件夹如果是 * 则会自动生成文件夹 ffmpeg_xxx 在源文件夹旁边。";
             // 
             // txtOutputDir
             // 
@@ -140,7 +153,7 @@
             pnTemplate.Controls.Add(txtParams);
             pnTemplate.Controls.Add(pnTemplateUp);
             pnTemplate.Dock = DockStyle.Top;
-            pnTemplate.Location = new Point(0, 196);
+            pnTemplate.Location = new Point(0, 204);
             pnTemplate.Name = "pnTemplate";
             pnTemplate.Size = new Size(979, 443);
             pnTemplate.TabIndex = 5;
@@ -352,5 +365,6 @@
         private CheckBox checkEndPause;
         private Button BtnDownloadFFmpeg;
         private Button BtnOpenLastDest;
+        private ComboBox ListSearchs;
     }
 }

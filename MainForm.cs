@@ -62,6 +62,13 @@ namespace BuyiFFmpegUI
             ListTemplates.EndUpdate();
         }
 
+        private void ListSearchs_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var obj = ListSearchs.SelectedItem;
+            if (obj == null || obj is not string t) { return; }
+            txtSearch.Text = t;
+        }
+
         private void BtnSaveTemplate_Click(object sender, EventArgs e)
         {
             try
@@ -171,8 +178,8 @@ namespace BuyiFFmpegUI
                 if (string.IsNullOrEmpty(sourceDirPath)) { throw new Exception("源文件夹是空白"); }
                 var sourceDir = new DirectoryInfo(sourceDirPath);
                 if (!sourceDir.Exists) { throw new Exception($"源文件夹不存在 {sourceDir.FullName}"); }
-                var search = txtSearch.Text.Trim();
-                if (string.IsNullOrEmpty(search)) { search = "*"; }
+                var searchRaw = txtSearch.Text.Trim();
+                if (string.IsNullOrEmpty(searchRaw)) { searchRaw = "*"; }
                 var outputDirPath = Utils.CleanPath(txtOutputDir.Text);
                 if (string.IsNullOrEmpty(outputDirPath) || outputDirPath.Equals("*"))
                 {
@@ -186,13 +193,19 @@ namespace BuyiFFmpegUI
                 if (string.IsNullOrEmpty(outputFormat)) { throw new Exception($"没有要输出的格式"); }
                 var listTargets = new List<string>();
                 var sourceFormats = new HashSet<string>();
-                foreach (var item in sourceDir.EnumerateFiles(search, SearchOption.AllDirectories))
+                var searchs = searchRaw.Split('|').ToHashSet();
+                foreach (var search in searchs)
                 {
-                    listTargets.Add(Utils.CleanPath(item.FullName));
-                    sourceFormats.Add(item.Extension.ToLower());
-                    CheckDoEvents();
+                    var s1 = search.Trim();
+                    if (string.IsNullOrEmpty(s1)) { continue; }
+                    foreach (var item in sourceDir.EnumerateFiles(s1, SearchOption.AllDirectories))
+                    {
+                        listTargets.Add(Utils.CleanPath(item.FullName));
+                        sourceFormats.Add(item.Extension.ToLower());
+                        CheckDoEvents();
+                    }
                 }
-                if (listTargets.Count < 1) { throw new Exception($"找不到任何要转码的文件\n{sourceDir.FullName}\n{search}"); }
+                if (listTargets.Count < 1) { throw new Exception($"找不到任何要转码的文件\n{sourceDir.FullName}\n{searchRaw}"); }
 
                 var msg = $"你确定要开始转码吗？\n同时运行 {taskNum} 个任务\n源： {sourceDir.FullName}\n输出： {outputDirPath}\n输出格式： {outputFormat}\n源文件个数： {listTargets.Count}\n源文件格式： {string.Join("  ", sourceFormats)}";
                 var ask = MessageBox.Show(msg, this.Text, MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
