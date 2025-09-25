@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ProgressBar;
 
 namespace BuyiFFmpegUI
 {
@@ -288,20 +289,52 @@ namespace BuyiFFmpegUI
                 }
                 BtnOpenLastDest.Enabled = true;
                 BtnKillCmd.Enabled = true;
-                foreach (var path in scriptFiles)
+                var cmdWay = pauseOnEnd ? "/k" : "/c";
+                if (checkUseWt.Checked)
                 {
                     var info = new ProcessStartInfo()
                     {
-                        UseShellExecute = true,
-                        FileName = "cmd.exe",
+                        FileName = "wt.exe",
                         WorkingDirectory = AppContext.BaseDirectory,
                         WindowStyle = ProcessWindowStyle.Normal
                     };
-                    info.ArgumentList.Add(pauseOnEnd ? "/k" : "/c");
-                    info.ArgumentList.Add(path);
+                    bool first = true;
+                    foreach (var path in scriptFiles)
+                    {
+                        if (first)
+                        {
+                            first = false;
+                        }
+                        else
+                        {
+                            info.ArgumentList.Add(";");
+                            info.ArgumentList.Add("nt");
+                        }
+                        info.ArgumentList.Add("cmd.exe");
+                        info.ArgumentList.Add(cmdWay);
+                        info.ArgumentList.Add(path);
+                    }
                     var v = Process.Start(info);
-                    if (v == null) { throw new Exception("创建cmd进程失败"); }
+                    if (v == null) { throw new Exception("创建 windows terminal 进程失败"); }
                     createdProcess.Add(v);
+                }
+                else
+                {
+                    foreach (var path in scriptFiles)
+                    {
+                        var info = new ProcessStartInfo()
+                        {
+                            UseShellExecute = true,
+                            FileName = "cmd.exe",
+                            WorkingDirectory = AppContext.BaseDirectory,
+                            WindowStyle = ProcessWindowStyle.Normal
+                        };
+                        info.ArgumentList.Add(cmdWay);
+                        info.ArgumentList.Add(path);
+                        var v = Process.Start(info);
+                        if (v == null) { throw new Exception("创建cmd进程失败"); }
+                        createdProcess.Add(v);
+                    }
                 }
                 lastOutputDir = outputDirPath;
             }

@@ -54,6 +54,7 @@
             checkEndPause = new CheckBox();
             BtnOpenLastDest = new Button();
             BtnKillCmd = new Button();
+            checkUseWt = new CheckBox();
             pnInput.SuspendLayout();
             pnTemplate.SuspendLayout();
             pnTemplateUp.SuspendLayout();
@@ -321,10 +322,23 @@
             BtnKillCmd.UseVisualStyleBackColor = true;
             BtnKillCmd.Click += BtnKillCmd_Click;
             // 
+            // checkUseWt
+            // 
+            checkUseWt.AutoSize = true;
+            checkUseWt.Checked = true;
+            checkUseWt.CheckState = CheckState.Checked;
+            checkUseWt.Location = new Point(12, 729);
+            checkUseWt.Name = "checkUseWt";
+            checkUseWt.Size = new Size(276, 25);
+            checkUseWt.TabIndex = 14;
+            checkUseWt.Text = "使用 Windows Terminal 多标签页";
+            checkUseWt.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             AutoScaleMode = AutoScaleMode.None;
             ClientSize = new Size(979, 767);
+            Controls.Add(checkUseWt);
             Controls.Add(BtnKillCmd);
             Controls.Add(BtnOpenLastDest);
             Controls.Add(checkEndPause);
@@ -339,7 +353,7 @@
             MaximizeBox = false;
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "Buyi FFmpeg UI 2025.09.04";
+            Text = "Buyi FFmpeg UI 2025.09.25";
             Load += MainForm_Load;
             pnInput.ResumeLayout(false);
             pnInput.PerformLayout();
@@ -380,5 +394,6 @@
         private Button BtnOpenLastDest;
         private ComboBox ListSearchs;
         private Button BtnKillCmd;
+        private CheckBox checkUseWt;
     }
 }
