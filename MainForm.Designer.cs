@@ -353,7 +353,7 @@
             MaximizeBox = false;
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "Buyi FFmpeg UI 2025.09.25";
+            Text = "Buyi FFmpeg UI 2025.10.23";
             Load += MainForm_Load;
             pnInput.ResumeLayout(false);
             pnInput.PerformLayout();
