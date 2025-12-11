@@ -259,6 +259,7 @@ namespace BuyiFFmpegUI
                 var targetGroups = listTargets.Chunk(chunkSize).ToArray();
                 int scriptIndex = 0;
                 var scriptFiles = new List<string>();
+                var appDir = AppContext.BaseDirectory;
                 foreach (var targetGroup in targetGroups)
                 {
                     scriptIndex += 1;
@@ -267,6 +268,11 @@ namespace BuyiFFmpegUI
                     using var stream = File.Create(scriptPath);
                     using var writer = new StreamWriter(stream, Utils.UTF8Nobom);
                     writer.WriteLine($"chcp 65001 "); // 切换到 utf8 字符集
+                    if (appDir.Length > 2)
+                    {
+                        writer.WriteLine(appDir.Substring(0, 2));
+                    }
+                    writer.WriteLine($"cd \"{appDir}\"");
                     int targetIndex = 0;
                     foreach (var target in targetGroup)
                     {
