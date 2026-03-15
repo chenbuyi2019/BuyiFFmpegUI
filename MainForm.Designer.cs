@@ -336,7 +336,8 @@
             // 
             // MainForm
             // 
-            AutoScaleMode = AutoScaleMode.None;
+            AutoScaleDimensions = new SizeF(96F, 96F);
+            AutoScaleMode = AutoScaleMode.Dpi;
             ClientSize = new Size(979, 767);
             Controls.Add(checkUseWt);
             Controls.Add(BtnKillCmd);

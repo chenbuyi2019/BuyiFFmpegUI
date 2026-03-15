@@ -13,6 +13,7 @@ namespace BuyiFFmpegUI
             try
             {
                 ApplicationConfiguration.Initialize();
+                Application.SetHighDpiMode(HighDpiMode.PerMonitorV2);
                 Application.Run(new MainForm());
             }
             catch (Exception ex)
